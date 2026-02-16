@@ -1,0 +1,116 @@
+/* XP / Points Notification */
+.notif {
+  position: fixed;
+  top: 90px;
+  right: 24px;
+  padding: 14px 24px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: var(--fs-base);
+  z-index: 9000;
+  animation: notifSlideIn 0.3s ease, notifSlideOut 0.3s ease 2.5s forwards;
+  box-shadow: var(--shadow-lg);
+}
+
+.notif-xp {
+  background: linear-gradient(135deg, #9F7AEA, #B794F4);
+  color: white;
+}
+
+.notif-points {
+  background: linear-gradient(135deg, #F6AD55, #F6E05E);
+  color: #744210;
+}
+
+.notif-achievement {
+  background: linear-gradient(135deg, #48BB78, #68D391);
+  color: white;
+}
+
+.notif-icon {
+  font-size: 24px;
+}
+
+@keyframes notifSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes notifSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+}
+
+/* Celebration */
+.celebration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -10px;
+  border-radius: 2px;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.celebration-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--gold);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  animation: celebrationPop 0.5s ease;
+}
+
+@keyframes celebrationPop {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+

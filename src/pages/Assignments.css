@@ -1,0 +1,199 @@
+/* ============================================
+   ASSIGNMENTS PAGE
+   ============================================ */
+
+.assignments-page {
+  padding-bottom: 60px;
+}
+
+.assignments-list {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.assign-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+  animation: fadeInUp 0.4s ease backwards;
+}
+
+.assign-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.assign-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.assign-card-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  flex: 1;
+}
+
+.assign-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #7C5CBF, #9F7AEA);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.assign-card-title h3 {
+  color: var(--text-primary);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.assign-desc {
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.assign-actions-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.assign-xp-badge {
+  padding: 3px 10px;
+  background: #F3EAFF;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #7C5CBF;
+}
+
+/* Instructions */
+.assign-instructions {
+  background: var(--bg-secondary);
+  padding: 18px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.assign-instructions-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.assign-instructions-icon {
+  font-size: 16px;
+}
+
+.assign-instructions-header strong {
+  color: #7C5CBF;
+  font-size: var(--fs-sm);
+  flex: 1;
+}
+
+.assign-instructions p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: var(--fs-sm);
+  margin: 0;
+}
+
+/* Submit area */
+.assign-submit-area {
+  margin-top: 4px;
+}
+
+.assign-start-btn {
+  width: auto;
+}
+
+.assign-form textarea {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-size: var(--fs-base);
+  font-family: inherit;
+  margin-bottom: 12px;
+  resize: vertical;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: border-color 0.2s ease;
+  min-height: 100px;
+}
+
+.assign-form textarea:focus {
+  outline: none;
+  border-color: #7C5CBF;
+}
+
+.assign-form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Done state */
+.assign-done {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: #F0FFF4;
+  border-radius: 12px;
+  border: 1px solid #C6F6D5;
+}
+
+.assign-done-icon {
+  font-size: 24px;
+}
+
+.assign-done-text {
+  color: #276749;
+  font-weight: 600;
+  margin: 0 0 2px;
+}
+
+.assign-score {
+  color: #38A169;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  margin: 0;
+}
+
+.assign-feedback {
+  color: var(--text-secondary);
+  font-size: var(--fs-sm);
+  margin: 4px 0 0;
+}
+
+@media (max-width: 768px) {
+  .assign-card {
+    padding: 20px;
+  }
+
+  .assign-card-header {
+    flex-direction: column;
+    gap: 10px;
+  }  .assign-actions-top {
+    align-self: flex-start;
+  }
+}

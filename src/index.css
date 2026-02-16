@@ -1,0 +1,240 @@
+/* ============================================
+   ENGLISH LEARNING PLATFORM - Design System
+   Colors optimized for learning & focus
+   ============================================ */
+
+:root {
+  /* Primary - Soft Teal Blue (calming, promotes focus) */
+  --primary: #2B6CB0;
+  --primary-light: #63B3ED;
+  --primary-dark: #1A365D;
+  --primary-50: #EBF8FF;
+  --primary-100: #BEE3F8;
+  --primary-200: #90CDF4;
+
+  /* Secondary - Warm Green (growth, success) */
+  --secondary: #38A169;
+  --secondary-light: #68D391;
+  --secondary-dark: #276749;
+  --secondary-50: #F0FFF4;
+
+  /* Accent - Soft Orange (energy, motivation) */
+  --accent: #ED8936;
+  --accent-light: #FBD38D;
+  --accent-dark: #C05621;
+
+  /* Success, Warning, Error */
+  --success: #48BB78;
+  --warning: #ECC94B;
+  --error: #FC8181;
+  --error-dark: #C53030;
+
+  /* Neutrals */
+  --bg-primary: #F7FAFC;
+  --bg-secondary: #EDF2F7;
+  --bg-card: #FFFFFF;
+  --text-primary: #1A202C;
+  --text-secondary: #4A5568;
+  --text-muted: #A0AEC0;
+  --border: #E2E8F0;
+  --border-focus: #63B3ED;
+
+  /* Points / Rewards */
+  --gold: #F6AD55;
+  --gold-dark: #DD6B20;
+  --xp: #9F7AEA;
+  --xp-light: #E9D8FD;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.12);
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* Font sizes (base for accessibility scaling) */
+  --font-scale: 1;
+  --fs-xs: calc(0.75rem * var(--font-scale));
+  --fs-sm: calc(0.875rem * var(--font-scale));
+  --fs-base: calc(1rem * var(--font-scale));
+  --fs-md: calc(1.125rem * var(--font-scale));
+  --fs-lg: calc(1.25rem * var(--font-scale));
+  --fs-xl: calc(1.5rem * var(--font-scale));
+  --fs-2xl: calc(2rem * var(--font-scale));
+  --fs-3xl: calc(2.5rem * var(--font-scale));
+  --fs-4xl: calc(3rem * var(--font-scale));
+}
+
+/* High Contrast Mode */
+[data-theme="high-contrast"] {
+  --primary: #0050A0;
+  --primary-light: #3B82F6;
+  --primary-dark: #000033;
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F0F0F0;
+  --bg-card: #FFFFFF;
+  --text-primary: #000000;
+  --text-secondary: #1A1A1A;
+  --text-muted: #333333;
+  --border: #000000;
+  --shadow-sm: 0 0 0 2px #000000;
+  --shadow-md: 0 0 0 2px #000000;
+}
+
+/* Dark Mode for reduced eye strain */
+[data-theme="dark"] {
+  --primary: #63B3ED;
+  --primary-light: #90CDF4;
+  --primary-dark: #2B6CB0;
+  --primary-50: #1A365D;
+  --bg-primary: #1A202C;
+  --bg-secondary: #2D3748;
+  --bg-card: #2D3748;
+  --text-primary: #F7FAFC;
+  --text-secondary: #CBD5E0;
+  --text-muted: #718096;
+  --border: #4A5568;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Font size scale classes */
+[data-font-scale="large"] { --font-scale: 1.25; }
+[data-font-scale="x-large"] { --font-scale: 1.5; }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 
+    'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Focus styles for keyboard navigation */
+*:focus-visible {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Skip to content link for screen readers */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  z-index: 10000;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes confetti {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
