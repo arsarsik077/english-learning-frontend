@@ -6,6 +6,7 @@ const AccessibilityPanel = () => {
   const {
     theme, setTheme,
     fontSize, setFontSize,
+    ttsEnabled, setTtsEnabled,
     screenReaderMode, setScreenReaderMode,
     reducedMotion, setReducedMotion,
     dyslexiaFont, setDyslexiaFont,
@@ -90,6 +91,21 @@ const AccessibilityPanel = () => {
 
         <div className="a11y-section">
           <h3>⚙️ Дополнительно</h3>
+
+          <label className="a11y-toggle">
+            <input 
+              type="checkbox" 
+              checked={ttsEnabled} 
+              onChange={(e) => setTtsEnabled(e.target.checked)}
+              aria-label="Озвучивание текста"
+            />
+            <span className="a11y-toggle-slider"></span>
+            <span className="a11y-toggle-label">
+              <span className="a11y-icon">🔊</span>
+              Озвучивание текста
+              <small>Включает/выключает все кнопки озвучивания</small>
+            </span>
+          </label>
           
           <label className="a11y-toggle">
             <input 
@@ -100,7 +116,7 @@ const AccessibilityPanel = () => {
             />
             <span className="a11y-toggle-slider"></span>
             <span className="a11y-toggle-label">
-              <span className="a11y-icon">🔊</span>
+              <span className="a11y-icon">♿</span>
               Режим экранного чтеца
               <small>Дополнительные aria-метки для незрячих</small>
             </span>

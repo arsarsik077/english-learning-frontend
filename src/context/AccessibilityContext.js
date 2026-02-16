@@ -22,6 +22,9 @@ export const AccessibilityProvider = ({ children }) => {
   const [dyslexiaFont, setDyslexiaFont] = useState(
     localStorage.getItem('dyslexiaFont') === 'true'
   );
+  const [ttsEnabled, setTtsEnabled] = useState(
+    localStorage.getItem('ttsEnabled') !== 'false'
+  );
   const [showPanel, setShowPanel] = useState(false);
 
   useEffect(() => {
@@ -84,8 +87,16 @@ export const AccessibilityProvider = ({ children }) => {
     }
   }, [dyslexiaFont]);
 
-  // Text-to-speech helper
+  useEffect(() => {
+    localStorage.setItem('ttsEnabled', ttsEnabled);
+    if (!ttsEnabled && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  }, [ttsEnabled]);
+
+  // Text-to-speech helper — respects the ttsEnabled toggle
   const speak = (text, lang = 'en-US') => {
+    if (!ttsEnabled) return;
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
@@ -122,6 +133,8 @@ export const AccessibilityProvider = ({ children }) => {
     setReducedMotion,
     dyslexiaFont,
     setDyslexiaFont,
+    ttsEnabled,
+    setTtsEnabled,
     showPanel,
     setShowPanel,
     speak,
