@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import axios from 'axios';
 import { usePoints } from '../context/PointsContext';
 import { useAccessibility } from '../context/AccessibilityContext';
+import API_URL from '../config';
 import './AIChat.css';
 
 /* ====================================
@@ -8,124 +10,11 @@ import './AIChat.css';
    Cute Owl Character "Luna"
    ==================================== */
 
-// ---- Gemini AI Integration ----
-const SYSTEM_PROMPT = `Ты — Luna (Луна), милая и дружелюбная AI-сова, которая помогает изучать английский язык. 
-Ты общаешься тепло, с добротой, как лучший друг и учитель одновременно.
-
-Твои правила:
-1. Отвечай кратко но содержательно (2-4 предложения обычно).
-2. Если пользователь пишет на русском — отвечай на русском, но включай английские слова/фразы для обучения.
-3. Если пользователь пишет на английском — хвали за это и мягко исправляй ошибки если есть.
-4. Используй эмодзи умеренно (1-2 на сообщение).
-5. Давай практические примеры и предлагай попрактиковаться.
-6. Будь поддерживающей и позитивной.
-7. Адаптируйся к уровню пользователя.
-8. Иногда предлагай мини-задания: "Попробуй составить предложение с этим словом!"
-9. Если просят перевод — давай перевод с примером использования.
-10. Не используй markdown форматирование (жирный текст, списки). Пиши простым текстом.`;
-
-const DEFAULT_GEMINI_KEY = 'AIzaSyBUTeYW7NEst7RRPH1MqJJjleQRkh4P-So';
-const getApiKey = () => localStorage.getItem('gemini_api_key') || DEFAULT_GEMINI_KEY;
-
-// Models to try in order (fallback chain)
-const GEMINI_MODELS = [
-  'gemini-2.0-flash',
-  'gemini-1.5-flash',
-  'gemini-1.5-flash-8b',
-  'gemini-2.0-flash-lite',
-];
-
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-const callGeminiAPI = async (messages) => {
-  const apiKey = getApiKey();
-  if (!apiKey) return null;
-
-  const contents = messages.map(msg => ({
-    role: msg.type === 'user' ? 'user' : 'model',
-    parts: [{ text: msg.text }]
-  }));
-
-  const requestBody = {
-    system_instruction: {
-      parts: [{ text: SYSTEM_PROMPT }]
-    },
-    contents: contents,
-    generationConfig: {
-      temperature: 0.8,
-      topP: 0.9,
-      maxOutputTokens: 500,
-    }
-  };
-
-  // Try each model in the fallback chain
-  for (let i = 0; i < GEMINI_MODELS.length; i++) {
-    const model = GEMINI_MODELS[i];
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-
-    try {
-      const response = await fetch(geminiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (response.status === 429) {
-        // Rate limited — try next model or retry after delay
-        console.warn(`Model ${model} rate limited, trying next...`);
-        
-        // If last model, wait and retry once
-        if (i === GEMINI_MODELS.length - 1) {
-          console.log('All models rate limited, waiting 5s and retrying...');
-          await sleep(5000);
-          const retryRes = await fetch(geminiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestBody),
-          });
-          if (retryRes.ok) {
-            const retryData = await retryRes.json();
-            const retryText = retryData.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (retryText) return { success: true, text: retryText };
-          }
-          return { success: false, error: 'Превышен лимит запросов. Подождите минуту и попробуйте снова.' };
-        }
-        continue;
-      }
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        const errorMsg = errorData?.error?.message || `HTTP ${response.status}`;
-        // If it's a model-not-found error, try the next one
-        if (response.status === 404) {
-          console.warn(`Model ${model} not found, trying next...`);
-          continue;
-        }
-        throw new Error(errorMsg);
-      }
-
-      const data = await response.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!text) throw new Error('Empty response');
-      return { success: true, text };
-
-    } catch (error) {
-      console.error(`Gemini API error (${model}):`, error);
-      // If not the last model, try the next one
-      if (i < GEMINI_MODELS.length - 1) continue;
-      return { success: false, error: error.message };
-    }
-  }
-
-  return { success: false, error: 'Не удалось получить ответ от AI.' };
-};
-
 // ---- Beautiful Luna Character (SVG) ----
 const LunaCharacter = ({ mood = 'idle', speaking = false }) => {
   const isHappy = mood === 'happy';
   const isExcited = mood === 'excited';
   const isThinking = mood === 'thinking';
-  const showOpenEyes = !isHappy && !isExcited;
   const blushOpacity = isHappy || isExcited ? 0.8 : 0.3;
 
   return (
@@ -363,130 +252,9 @@ const LunaCharacter = ({ mood = 'idle', speaking = false }) => {
 /* ====================================
    Main AI Chat Component
    ==================================== */
-/* ====================================
-   API Key Setup Component
-   ==================================== */
-const ApiKeySetup = ({ onSave }) => {
-  const [key, setKey] = useState('');
-  const [testing, setTesting] = useState(false);
-  const [error, setError] = useState('');
-
-  const testAndSave = async () => {
-    if (!key.trim()) return;
-    setTesting(true);
-    setError('');
-
-    try {
-      const testUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key.trim()}`;
-      const res = await fetch(testUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: 'Say "Hello!" in one word.' }] }],
-          generationConfig: { maxOutputTokens: 10 }
-        }),
-      });
-
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData?.error?.message || `Ошибка ${res.status}`);
-      }
-
-      localStorage.setItem('gemini_api_key', key.trim());
-      onSave(key.trim());
-    } catch (err) {
-      setError(err.message || 'Не удалось подключиться. Проверьте ключ.');
-    } finally {
-      setTesting(false);
-    }
-  };
-
-  return (
-    <div className="api-key-setup">
-      <div className="api-key-card">
-        <div className="api-key-icon">🔑</div>
-        <h2>Настройка AI помощника Luna</h2>
-        <p>
-          Для работы Luna нужен бесплатный API ключ от Google Gemini. 
-          Получить его можно за 1 минуту:
-        </p>
-        
-        <div className="api-key-steps">
-          <div className="api-step">
-            <span className="step-num">1</span>
-            <div>
-              <strong>Перейдите на сайт Google AI Studio:</strong>
-              <a 
-                href="https://aistudio.google.com/apikey" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="api-link"
-              >
-                aistudio.google.com/apikey ↗
-              </a>
-            </div>
-          </div>
-          <div className="api-step">
-            <span className="step-num">2</span>
-            <div>
-              <strong>Войдите в Google аккаунт</strong> (если ещё не вошли)
-            </div>
-          </div>
-          <div className="api-step">
-            <span className="step-num">3</span>
-            <div>
-              <strong>Нажмите "Create API Key"</strong> и скопируйте ключ
-            </div>
-          </div>
-          <div className="api-step">
-            <span className="step-num">4</span>
-            <div>
-              <strong>Вставьте ключ ниже</strong> и нажмите "Подключить"
-            </div>
-          </div>
-        </div>
-
-        <div className="api-key-input-area">
-          <input
-            type="password"
-            value={key}
-            onChange={(e) => { setKey(e.target.value); setError(''); }}
-            placeholder="Вставьте API ключ сюда..."
-            className="api-key-input"
-            onKeyDown={(e) => e.key === 'Enter' && testAndSave()}
-          />
-          <button 
-            className="btn btn-primary" 
-            onClick={testAndSave}
-            disabled={!key.trim() || testing}
-          >
-            {testing ? '⏳ Проверка...' : '🚀 Подключить'}
-          </button>
-        </div>
-
-        {error && (
-          <div className="api-key-error">
-            ❌ {error}
-          </div>
-        )}
-
-        <div className="api-key-note">
-          <span>🔒</span>
-          <p>Ключ хранится только на вашем устройстве в браузере и никуда не отправляется кроме серверов Google.</p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/* ====================================
-   Main AI Chat Component
-   ==================================== */
 const AIChat = () => {
   const { recordAIMessage, addXP } = usePoints();
   const { speak } = useAccessibility();
-  const [apiKey, setApiKey] = useState(getApiKey() || DEFAULT_GEMINI_KEY);
-  const [showSettings, setShowSettings] = useState(false);
   const [messages, setMessages] = useState([
     {
       type: 'ai',
@@ -507,31 +275,9 @@ const AIChat = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleApiKeySaved = (newKey) => {
-    setApiKey(newKey);
-    setShowSettings(false);
-    setMessages(prev => [...prev, {
-      type: 'ai',
-      text: "Отлично, я подключена! 🎉 Теперь я настоящая AI и могу отвечать на любые вопросы. Давай начнём изучать английский вместе! Что хочешь попрактиковать?",
-    }]);
-    setOwlMood('excited');
-    setTimeout(() => setOwlMood('idle'), 3000);
-  };
-
-  const handleRemoveKey = () => {
-    localStorage.removeItem('gemini_api_key');
-    setApiKey('');
-    setShowSettings(false);
-  };
-
   const sendMessage = useCallback(async (text) => {
     const userMsg = (text || input).trim();
     if (!userMsg || isTyping) return;
-
-    if (!apiKey) {
-      setShowSettings(true);
-      return;
-    }
 
     setInput('');
     const newMessages = [...messages, { type: 'user', text: userMsg }];
@@ -540,28 +286,22 @@ const AIChat = () => {
     setOwlMood('thinking');
 
     try {
-      const result = await callGeminiAPI(newMessages);
-      
+      const response = await axios.post(`${API_URL}/api/ai/chat`, {
+        messages: newMessages,
+      });
+
+      const result = response.data;
+
       if (result && result.success) {
         setMessages(prev => [...prev, { type: 'ai', text: result.text }]);
         setOwlMood('happy');
         recordAIMessage();
         addXP(5, 'общение с Luna');
       } else {
-        const errorMsg = result?.error || 'Неизвестная ошибка';
-        
-        // Check for specific API key errors
-        if (errorMsg.toLowerCase().includes('api key') || errorMsg.includes('401') || errorMsg.includes('403')) {
-          setMessages(prev => [...prev, {
-            type: 'ai',
-            text: `Ой, похоже API ключ не работает 😅 Ошибка: "${errorMsg}". Нажмите кнопку ⚙️ вверху, чтобы обновить ключ.`,
-          }]);
-        } else {
-          setMessages(prev => [...prev, {
-            type: 'ai',
-            text: "Ой, что-то пошло не так 😅 Попробуй спросить ещё раз через секунду!",
-          }]);
-        }
+        setMessages(prev => [...prev, {
+          type: 'ai',
+          text: "Ой, что-то пошло не так 😅 Попробуй спросить ещё раз через секунду!",
+        }]);
         setOwlMood('idle');
       }
     } catch (err) {
@@ -574,7 +314,7 @@ const AIChat = () => {
       setIsTyping(false);
       setTimeout(() => setOwlMood('idle'), 3000);
     }
-  }, [input, isTyping, messages, recordAIMessage, addXP, apiKey]);
+  }, [input, isTyping, messages, recordAIMessage, addXP]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -592,38 +332,6 @@ const AIChat = () => {
     setInput(prompt);
     setTimeout(() => sendMessage(prompt), 50);
   };
-
-  // Show API key setup if no key is set
-  if (!apiKey && !showSettings) {
-    return (
-      <main className="ai-chat-page" role="main">
-        <div className="container">
-          <ApiKeySetup onSave={handleApiKeySaved} />
-        </div>
-      </main>
-    );
-  }
-
-  // Show settings overlay
-  if (showSettings) {
-    return (
-      <main className="ai-chat-page" role="main">
-        <div className="container">
-          <button className="btn btn-secondary" onClick={() => setShowSettings(false)} style={{marginBottom: 16}}>
-            ← Назад к чату
-          </button>
-          <ApiKeySetup onSave={handleApiKeySaved} />
-          {apiKey && (
-            <div style={{textAlign: 'center', marginTop: 16}}>
-              <button className="btn btn-secondary" onClick={handleRemoveKey} style={{color: '#E53E3E'}}>
-                🗑️ Удалить текущий ключ
-              </button>
-            </div>
-          )}
-        </div>
-      </main>
-    );
-  }
 
   return (
     <main className="ai-chat-page" role="main">
@@ -646,13 +354,6 @@ const AIChat = () => {
                 <span className="skill-tag">Перевод</span>
               </div>
             </div>
-            <button 
-              className="btn btn-sm btn-outline sidebar-settings-btn"
-              onClick={() => setShowSettings(true)}
-              title="Настройки API ключа"
-            >
-              ⚙️ Настройки
-            </button>
           </aside>
 
           {/* Chat area */}
@@ -662,14 +363,6 @@ const AIChat = () => {
                 <h1>🦉 Luna — AI Помощник</h1>
                 <p>Умная сова для изучения английского</p>
               </div>
-              <button 
-                className="btn btn-sm btn-outline chat-settings-btn"
-                onClick={() => setShowSettings(true)}
-                title="Настройки API ключа"
-                aria-label="Настройки"
-              >
-                ⚙️
-              </button>
             </div>
 
             <div className="chat-messages" role="log" aria-label="Сообщения чата" aria-live="polite">
