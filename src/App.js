@@ -1,7 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-const basename = process.env.PUBLIC_URL || '';
 import { AuthProvider } from './context/AuthContext';
 import { AccessibilityProvider } from './context/AccessibilityContext';
 import { PointsProvider } from './context/PointsContext';
@@ -22,6 +20,8 @@ import Games from './pages/Games';
 import AIChat from './pages/AIChat';
 import AdminPanel from './pages/AdminPanel';
 import './App.css';
+
+const basename = process.env.PUBLIC_URL || '';
 
 function App() {
   return (

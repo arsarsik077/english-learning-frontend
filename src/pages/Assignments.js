@@ -23,7 +23,7 @@ const Assignments = () => {
 
   const fetchAssignments = async () => {
     try {
-      const response = await axios.get('${API_URL}/api/assignments');
+      const response = await axios.get(`${API_URL}/api/assignments`);
       setAssignments(response.data);
     } catch (error) {
       console.error('Error fetching assignments:', error);

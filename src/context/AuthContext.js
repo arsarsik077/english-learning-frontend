@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get('${API_URL}/api/user/profile');
+      const response = await axios.get(`${API_URL}/api/user/profile`);
       setUser(response.data);
     } catch (error) {
       console.error('Error fetching user:', error);
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await axios.post('${API_URL}/api/auth/signin', {
+      const response = await axios.post(`${API_URL}/api/auth/signin`, {
         username,
         password,
       });
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      await axios.post('${API_URL}/api/auth/signup', userData);
+      await axios.post(`${API_URL}/api/auth/signup`, userData);
       return { success: true };
     } catch (error) {
       return {

@@ -20,7 +20,7 @@ const Cards = () => {
 
   const fetchCards = async () => {
     try {
-      const response = await axios.get('${API_URL}/api/cards');
+      const response = await axios.get(`${API_URL}/api/cards`);
       setCards(response.data);
     } catch (error) {
       console.error('Error fetching cards:', error);

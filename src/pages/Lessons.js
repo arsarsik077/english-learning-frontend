@@ -26,7 +26,7 @@ const Lessons = () => {
       setLoading(true);
       const url = filter !== 'all' 
         ? `${API_URL}/api/lessons?level=${filter.toUpperCase()}`
-        : '${API_URL}/api/lessons';
+        : `${API_URL}/api/lessons`;
       const response = await axios.get(url);
       setLessons(response.data);
     } catch (error) {
