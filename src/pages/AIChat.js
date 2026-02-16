@@ -122,178 +122,240 @@ const callGeminiAPI = async (messages) => {
 
 // ---- Beautiful Luna Character (SVG) ----
 const LunaCharacter = ({ mood = 'idle', speaking = false }) => {
-  // Dynamic eye shapes based on mood
-  const getLeftEye = () => {
-    switch (mood) {
-      case 'happy': return <path d="M62 82 Q70 76 78 82" stroke="#2D1B4E" strokeWidth="3" fill="none" strokeLinecap="round" />;
-      case 'thinking': return <ellipse cx="70" cy="80" rx="9" ry="10" fill="white" stroke="#C4B5D9" strokeWidth="1.5"><animate attributeName="ry" values="10;8;10" dur="2s" repeatCount="indefinite"/></ellipse>;
-      case 'excited': return <text x="70" y="85" textAnchor="middle" fontSize="16" fill="#FFD700">★</text>;
-      default: return <ellipse cx="70" cy="80" rx="9" ry="10" fill="white" stroke="#C4B5D9" strokeWidth="1.5"/>;
-    }
-  };
-  const getRightEye = () => {
-    switch (mood) {
-      case 'happy': return <path d="M102 82 Q110 76 118 82" stroke="#2D1B4E" strokeWidth="3" fill="none" strokeLinecap="round" />;
-      case 'thinking': return <ellipse cx="110" cy="80" rx="9" ry="10" fill="white" stroke="#C4B5D9" strokeWidth="1.5"><animate attributeName="ry" values="10;8;10" dur="2s" repeatCount="indefinite"/></ellipse>;
-      case 'excited': return <text x="110" y="85" textAnchor="middle" fontSize="16" fill="#FFD700">★</text>;
-      default: return <ellipse cx="110" cy="80" rx="9" ry="10" fill="white" stroke="#C4B5D9" strokeWidth="1.5"/>;
-    }
-  };
+  const isHappy = mood === 'happy';
+  const isExcited = mood === 'excited';
+  const isThinking = mood === 'thinking';
+  const showOpenEyes = !isHappy && !isExcited;
+  const blushOpacity = isHappy || isExcited ? 0.8 : 0.3;
 
   return (
     <div className={`luna-character ${mood} ${speaking ? 'speaking' : ''}`} aria-hidden="true">
-      <svg viewBox="0 0 180 220" className="luna-svg" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 200 260" className="luna-svg" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          {/* Gradients */}
-          <radialGradient id="bodyGrad" cx="50%" cy="30%" r="70%">
-            <stop offset="0%" stopColor="#A78BDA" />
-            <stop offset="100%" stopColor="#7C5CBF" />
+          <radialGradient id="bodyGrad" cx="50%" cy="25%" r="75%">
+            <stop offset="0%" stopColor="#C4A8E8" />
+            <stop offset="50%" stopColor="#9B7FCC" />
+            <stop offset="100%" stopColor="#7B5EAF" />
           </radialGradient>
-          <radialGradient id="bellyGrad" cx="50%" cy="30%" r="65%">
-            <stop offset="0%" stopColor="#F5F0FF" />
-            <stop offset="100%" stopColor="#E8DFF5" />
+          <radialGradient id="bellyGrad" cx="50%" cy="25%" r="70%">
+            <stop offset="0%" stopColor="#FFFAF5" />
+            <stop offset="50%" stopColor="#F5ECFF" />
+            <stop offset="100%" stopColor="#E8DBF5" />
           </radialGradient>
-          <radialGradient id="faceGrad" cx="50%" cy="40%" r="60%">
-            <stop offset="0%" stopColor="#FFF8F0" />
-            <stop offset="100%" stopColor="#F0E6F6" />
+          <radialGradient id="faceGrad" cx="50%" cy="35%" r="65%">
+            <stop offset="0%" stopColor="#FFFCF7" />
+            <stop offset="100%" stopColor="#F2E8FA" />
           </radialGradient>
-          <linearGradient id="capGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#3D3D5C" />
-            <stop offset="100%" stopColor="#2D2B4E" />
-          </linearGradient>
+          <radialGradient id="irisGradL" cx="40%" cy="35%" r="60%">
+            <stop offset="0%" stopColor="#A78BFA" />
+            <stop offset="50%" stopColor="#7C3AED" />
+            <stop offset="100%" stopColor="#4C1D95" />
+          </radialGradient>
+          <radialGradient id="irisGradR" cx="40%" cy="35%" r="60%">
+            <stop offset="0%" stopColor="#A78BFA" />
+            <stop offset="50%" stopColor="#7C3AED" />
+            <stop offset="100%" stopColor="#4C1D95" />
+          </radialGradient>
           <linearGradient id="wingGradL" x1="1" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#9B7FCC" />
-            <stop offset="100%" stopColor="#6B4FA8" />
+            <stop offset="0%" stopColor="#B89CE0" />
+            <stop offset="100%" stopColor="#7B5EAF" />
           </linearGradient>
           <linearGradient id="wingGradR" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#9B7FCC" />
-            <stop offset="100%" stopColor="#6B4FA8" />
+            <stop offset="0%" stopColor="#B89CE0" />
+            <stop offset="100%" stopColor="#7B5EAF" />
           </linearGradient>
-          {/* Soft shadow */}
+          <linearGradient id="earGrad" x1="0" y1="1" x2="0.3" y2="0">
+            <stop offset="0%" stopColor="#9B7FCC" />
+            <stop offset="100%" stopColor="#D4BEF0" />
+          </linearGradient>
+          <linearGradient id="scarfGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#F59E0B" />
+            <stop offset="50%" stopColor="#F97316" />
+            <stop offset="100%" stopColor="#EF4444" />
+          </linearGradient>
+          <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#DDD6FE" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#DDD6FE" stopOpacity="0" />
+          </radialGradient>
           <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#7C5CBF" floodOpacity="0.18"/>
+            <feDropShadow dx="0" dy="3" stdDeviation="5" floodColor="#6D28D9" floodOpacity="0.15"/>
           </filter>
           <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="blur"/>
+            <feGaussianBlur stdDeviation="3" result="blur"/>
             <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
         </defs>
 
-        {/* Floating animation container */}
         <g className="luna-float">
-          {/* Shadow on ground */}
-          <ellipse cx="90" cy="212" rx="38" ry="7" fill="#7C5CBF" opacity="0.13" className="luna-shadow"/>
+          {/* Ambient glow */}
+          <ellipse cx="100" cy="120" rx="80" ry="90" fill="url(#glowGrad)" className="luna-glow" />
+
+          {/* Ground shadow */}
+          <ellipse cx="100" cy="248" rx="36" ry="6" fill="#7B5EAF" opacity="0.12" className="luna-shadow"/>
 
           {/* Ear tufts */}
           <g className="luna-ears">
-            <path d="M58 52 Q54 28 66 42 Q60 36 58 52Z" fill="#8B6FC0" />
-            <path d="M56 50 Q50 22 64 38" stroke="#A78BDA" strokeWidth="2" fill="none" strokeLinecap="round"/>
-            <path d="M122 52 Q126 28 114 42 Q120 36 122 52Z" fill="#8B6FC0" />
-            <path d="M124 50 Q130 22 116 38" stroke="#A78BDA" strokeWidth="2" fill="none" strokeLinecap="round"/>
+            <path d="M62 58 Q55 22 72 48 Q63 32 62 58Z" fill="url(#earGrad)" />
+            <path d="M60 55 Q52 18 70 44" stroke="#D4BEF0" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.7"/>
+            <path d="M58 48 Q54 28 66 42" stroke="#E9DDFB" strokeWidth="1" fill="none" strokeLinecap="round" opacity="0.5"/>
+            <path d="M138 58 Q145 22 128 48 Q137 32 138 58Z" fill="url(#earGrad)" />
+            <path d="M140 55 Q148 18 130 44" stroke="#D4BEF0" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.7"/>
+            <path d="M142 48 Q146 28 134 42" stroke="#E9DDFB" strokeWidth="1" fill="none" strokeLinecap="round" opacity="0.5"/>
           </g>
 
           {/* Body */}
-          <ellipse cx="90" cy="155" rx="44" ry="52" fill="url(#bodyGrad)" filter="url(#softShadow)"/>
-          
-          {/* Belly */}
-          <ellipse cx="90" cy="162" rx="30" ry="38" fill="url(#bellyGrad)" />
-          {/* Belly feather lines */}
-          <path d="M75 148 Q90 143 105 148" stroke="#D6C8EE" strokeWidth="1.2" fill="none" opacity="0.6"/>
-          <path d="M72 158 Q90 152 108 158" stroke="#D6C8EE" strokeWidth="1.2" fill="none" opacity="0.5"/>
-          <path d="M74 168 Q90 162 106 168" stroke="#D6C8EE" strokeWidth="1.2" fill="none" opacity="0.4"/>
+          <ellipse cx="100" cy="172" rx="48" ry="58" fill="url(#bodyGrad)" filter="url(#softShadow)" className="luna-body"/>
+
+          {/* Belly with feather pattern */}
+          <ellipse cx="100" cy="178" rx="33" ry="42" fill="url(#bellyGrad)" />
+          <path d="M78 158 Q100 152 122 158" stroke="#D6C8EE" strokeWidth="1" fill="none" opacity="0.5"/>
+          <path d="M75 168 Q100 161 125 168" stroke="#D6C8EE" strokeWidth="1" fill="none" opacity="0.4"/>
+          <path d="M77 178 Q100 171 123 178" stroke="#D6C8EE" strokeWidth="1" fill="none" opacity="0.35"/>
+          <path d="M79 188 Q100 181 121 188" stroke="#D6C8EE" strokeWidth="1" fill="none" opacity="0.3"/>
+          <path d="M82 198 Q100 192 118 198" stroke="#D6C8EE" strokeWidth="1" fill="none" opacity="0.25"/>
 
           {/* Wings */}
-          <g className={`luna-wing-left ${mood === 'excited' ? 'wave' : ''}`}>
-            <path d="M46 130 Q28 145 35 175 Q42 185 50 170 Q45 155 48 140Z" fill="url(#wingGradL)" />
+          <g className={`luna-wing-left ${isExcited ? 'wave' : ''}`}>
+            <path d="M52 140 Q30 155 34 190 Q38 200 48 188 Q42 172 46 155Z" fill="url(#wingGradL)" />
+            <path d="M48 155 Q36 165 38 182" stroke="#9B7FCC" strokeWidth="0.8" fill="none" opacity="0.4"/>
+            <path d="M50 150 Q40 158 40 172" stroke="#B89CE0" strokeWidth="0.6" fill="none" opacity="0.3"/>
           </g>
-          <g className={`luna-wing-right ${mood === 'excited' ? 'wave' : ''}`}>
-            <path d="M134 130 Q152 145 145 175 Q138 185 130 170 Q135 155 132 140Z" fill="url(#wingGradR)" />
+          <g className={`luna-wing-right ${isExcited ? 'wave' : ''}`}>
+            <path d="M148 140 Q170 155 166 190 Q162 200 152 188 Q158 172 154 155Z" fill="url(#wingGradR)" />
+            <path d="M152 155 Q164 165 162 182" stroke="#9B7FCC" strokeWidth="0.8" fill="none" opacity="0.4"/>
+            <path d="M150 150 Q160 158 160 172" stroke="#B89CE0" strokeWidth="0.6" fill="none" opacity="0.3"/>
           </g>
 
           {/* Head */}
-          <ellipse cx="90" cy="78" rx="46" ry="42" fill="url(#bodyGrad)" />
+          <ellipse cx="100" cy="88" rx="50" ry="46" fill="url(#bodyGrad)" />
+          {/* Forehead highlight */}
+          <ellipse cx="100" cy="70" rx="28" ry="14" fill="white" opacity="0.08" />
 
           {/* Face disc */}
-          <ellipse cx="90" cy="82" rx="36" ry="30" fill="url(#faceGrad)" />
+          <ellipse cx="100" cy="92" rx="40" ry="34" fill="url(#faceGrad)" />
 
           {/* Eyes */}
           <g className="luna-eyes">
             {/* Left eye */}
             <g className="luna-eye-left">
-              {getLeftEye()}
-              {mood !== 'happy' && mood !== 'excited' && (
+              {isHappy ? (
+                <path d="M68 90 Q78 82 88 90" stroke="#4C1D95" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+              ) : isExcited ? (
                 <>
-                  <circle cx="70" cy="79" r="5.5" fill="#2D1B4E" className="luna-pupil-l">
-                    <animate attributeName="cx" values="70;68;72;70" dur="4s" repeatCount="indefinite"/>
+                  <circle cx="78" cy="87" r="13" fill="white" stroke="#DDD6FE" strokeWidth="1"/>
+                  <circle cx="78" cy="87" r="10" fill="#FDE68A" />
+                  <path d="M78 77 L80 83 L86 83 L81 87 L83 93 L78 89 L73 93 L75 87 L70 83 L76 83Z" fill="#F59E0B" />
+                  <circle cx="82" cy="83" r="3" fill="white" opacity="0.9"/>
+                </>
+              ) : (
+                <>
+                  <ellipse cx="78" cy="88" rx="13" ry="14" fill="white" stroke="#C4B5D9" strokeWidth="1.2"/>
+                  <circle cx="78" cy="88" r="8.5" fill="url(#irisGradL)">
+                    <animate attributeName="cx" values="78;76;80;78" dur="5s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="72" cy="77" r="2" fill="white" opacity="0.9"/>
-                  <circle cx="67" cy="81" r="1" fill="white" opacity="0.5"/>
+                  <circle cx="78" cy="88" r="4.5" fill="#1E1040">
+                    <animate attributeName="cx" values="78;76;80;78" dur="5s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="81" cy="84" r="3" fill="white" opacity="0.95"/>
+                  <circle cx="75" cy="91" r="1.5" fill="white" opacity="0.5"/>
+                  {isThinking && <circle cx="78" cy="88" r="8.5" fill="none" stroke="#A78BFA" strokeWidth="0.5" opacity="0.6">
+                    <animate attributeName="r" values="8.5;9.5;8.5" dur="2s" repeatCount="indefinite"/>
+                  </circle>}
                 </>
               )}
             </g>
             {/* Right eye */}
             <g className="luna-eye-right">
-              {getRightEye()}
-              {mood !== 'happy' && mood !== 'excited' && (
+              {isHappy ? (
+                <path d="M112 90 Q122 82 132 90" stroke="#4C1D95" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+              ) : isExcited ? (
                 <>
-                  <circle cx="110" cy="79" r="5.5" fill="#2D1B4E" className="luna-pupil-r">
-                    <animate attributeName="cx" values="110;108;112;110" dur="4s" repeatCount="indefinite"/>
+                  <circle cx="122" cy="87" r="13" fill="white" stroke="#DDD6FE" strokeWidth="1"/>
+                  <circle cx="122" cy="87" r="10" fill="#FDE68A" />
+                  <path d="M122 77 L124 83 L130 83 L125 87 L127 93 L122 89 L117 93 L119 87 L114 83 L120 83Z" fill="#F59E0B" />
+                  <circle cx="126" cy="83" r="3" fill="white" opacity="0.9"/>
+                </>
+              ) : (
+                <>
+                  <ellipse cx="122" cy="88" rx="13" ry="14" fill="white" stroke="#C4B5D9" strokeWidth="1.2"/>
+                  <circle cx="122" cy="88" r="8.5" fill="url(#irisGradR)">
+                    <animate attributeName="cx" values="122;120;124;122" dur="5s" repeatCount="indefinite"/>
                   </circle>
-                  <circle cx="112" cy="77" r="2" fill="white" opacity="0.9"/>
-                  <circle cx="107" cy="81" r="1" fill="white" opacity="0.5"/>
+                  <circle cx="122" cy="88" r="4.5" fill="#1E1040">
+                    <animate attributeName="cx" values="122;120;124;122" dur="5s" repeatCount="indefinite"/>
+                  </circle>
+                  <circle cx="125" cy="84" r="3" fill="white" opacity="0.95"/>
+                  <circle cx="119" cy="91" r="1.5" fill="white" opacity="0.5"/>
+                  {isThinking && <circle cx="122" cy="88" r="8.5" fill="none" stroke="#A78BFA" strokeWidth="0.5" opacity="0.6">
+                    <animate attributeName="r" values="8.5;9.5;8.5" dur="2s" repeatCount="indefinite"/>
+                  </circle>}
                 </>
               )}
             </g>
           </g>
 
+          {/* Eyebrows */}
+          {isThinking && (
+            <g className="luna-brows">
+              <path d="M66 74 Q78 70 88 74" stroke="#6D28D9" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.5"/>
+              <path d="M112 74 Q122 70 134 74" stroke="#6D28D9" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.5"/>
+            </g>
+          )}
+
           {/* Blush */}
-          <ellipse cx="58" cy="90" rx="8" ry="4.5" fill="#FFB8C6" opacity={mood === 'happy' || mood === 'excited' ? 0.7 : 0.35} className="luna-blush"/>
-          <ellipse cx="122" cy="90" rx="8" ry="4.5" fill="#FFB8C6" opacity={mood === 'happy' || mood === 'excited' ? 0.7 : 0.35} className="luna-blush"/>
+          <ellipse cx="62" cy="100" rx="9" ry="5" fill="#FBBFCA" opacity={blushOpacity} className="luna-blush">
+            <animate attributeName="opacity" values={`${blushOpacity};${blushOpacity * 0.7};${blushOpacity}`} dur="3s" repeatCount="indefinite"/>
+          </ellipse>
+          <ellipse cx="138" cy="100" rx="9" ry="5" fill="#FBBFCA" opacity={blushOpacity} className="luna-blush">
+            <animate attributeName="opacity" values={`${blushOpacity};${blushOpacity * 0.7};${blushOpacity}`} dur="3s" repeatCount="indefinite"/>
+          </ellipse>
 
           {/* Beak */}
           <g className={`luna-beak ${speaking ? 'talking' : ''}`}>
-            <path d="M84 95 L90 103 L96 95Z" fill="#F6AD55" stroke="#E8993C" strokeWidth="0.5"/>
+            <path d="M93 104 L100 114 L107 104Z" fill="#F6AD55" stroke="#E8993C" strokeWidth="0.8" strokeLinejoin="round"/>
+            <path d="M95 104 L100 110 L105 104" fill="#FBBF24" opacity="0.3"/>
             {speaking && (
-              <path d="M85 103 Q90 108 95 103" fill="#E8993C" className="luna-mouth-open"/>
+              <ellipse cx="100" cy="116" rx="5" ry="3" fill="#E8993C" className="luna-mouth-open"/>
             )}
+          </g>
+
+          {/* Scarf */}
+          <g className="luna-scarf">
+            <path d="M64 120 Q100 130 136 120 Q138 128 136 132 Q100 142 64 132 Q62 128 64 120Z" fill="url(#scarfGrad)" opacity="0.9"/>
+            <path d="M64 120 Q100 130 136 120" stroke="#DC2626" strokeWidth="0.5" fill="none" opacity="0.3"/>
+            <path d="M92 132 Q90 148 86 155 Q84 158 88 156 Q92 150 94 135Z" fill="#EF4444" opacity="0.8"/>
+            <path d="M96 133 Q98 150 102 157 Q104 160 100 158 Q96 152 94 136Z" fill="#F97316" opacity="0.8"/>
           </g>
 
           {/* Feet */}
           <g className="luna-feet">
-            <path d="M72 200 Q68 208 64 206 Q66 210 70 208 Q72 212 76 208 Q78 206 76 200Z" fill="#F6AD55"/>
-            <path d="M108 200 Q104 208 100 206 Q102 210 106 208 Q108 212 112 208 Q114 206 112 200Z" fill="#F6AD55"/>
+            <path d="M80 222 Q76 232 71 230 Q73 234 78 232 Q80 236 84 232 Q86 230 84 222Z" fill="#F6AD55" stroke="#E8993C" strokeWidth="0.5"/>
+            <path d="M120 222 Q116 232 111 230 Q113 234 118 232 Q120 236 124 232 Q126 230 124 222Z" fill="#F6AD55" stroke="#E8993C" strokeWidth="0.5"/>
           </g>
 
-          {/* Graduation cap */}
-          <g className="luna-cap">
-            <rect x="65" y="40" width="50" height="6" rx="1" fill="url(#capGrad)"/>
-            <polygon points="90,28 60,43 120,43" fill="url(#capGrad)"/>
-            {/* Tassel */}
-            <line x1="119" y1="43" x2="130" y2="56" stroke="#F6E05E" strokeWidth="2" strokeLinecap="round" className="luna-tassel"/>
-            <circle cx="130" cy="58" r="3.5" fill="#F6E05E" className="luna-tassel"/>
-          </g>
-
-          {/* Small sparkles around (when excited) */}
-          {mood === 'excited' && (
+          {/* Sparkles (excited) */}
+          {isExcited && (
             <g className="luna-sparkles">
-              <text x="30" y="65" fontSize="12" opacity="0.8" className="sparkle-1">✨</text>
-              <text x="148" y="55" fontSize="10" opacity="0.7" className="sparkle-2">✨</text>
-              <text x="140" y="100" fontSize="8" opacity="0.6" className="sparkle-3">💫</text>
-              <text x="36" y="105" fontSize="9" opacity="0.7" className="sparkle-4">⭐</text>
+              <circle cx="30" cy="60" r="3" fill="#FDE68A" className="sparkle-1"/>
+              <circle cx="170" cy="50" r="2.5" fill="#FDE68A" className="sparkle-2"/>
+              <circle cx="165" cy="105" r="2" fill="#C4B5FD" className="sparkle-3"/>
+              <circle cx="35" cy="110" r="2.5" fill="#C4B5FD" className="sparkle-4"/>
+              <path d="M25 80 L28 75 L31 80 L28 85Z" fill="#FDE68A" className="sparkle-1" opacity="0.8"/>
+              <path d="M175 75 L178 70 L181 75 L178 80Z" fill="#A78BFA" className="sparkle-2" opacity="0.8"/>
             </g>
           )}
 
-          {/* Thinking bubble */}
-          {mood === 'thinking' && (
+          {/* Thinking bubbles */}
+          {isThinking && (
             <g className="luna-think-bubbles">
-              <circle cx="140" cy="55" r="4" fill="white" stroke="#D6C8EE" strokeWidth="1" opacity="0.7" className="think-dot-1"/>
-              <circle cx="150" cy="45" r="3" fill="white" stroke="#D6C8EE" strokeWidth="1" opacity="0.5" className="think-dot-2"/>
-              <circle cx="156" cy="37" r="2" fill="white" stroke="#D6C8EE" strokeWidth="1" opacity="0.3" className="think-dot-3"/>
+              <circle cx="150" cy="58" r="5" fill="white" stroke="#DDD6FE" strokeWidth="1.5" className="think-dot-1"/>
+              <circle cx="162" cy="44" r="4" fill="white" stroke="#DDD6FE" strokeWidth="1" className="think-dot-2"/>
+              <circle cx="170" cy="32" r="3" fill="white" stroke="#DDD6FE" strokeWidth="0.8" className="think-dot-3"/>
             </g>
           )}
         </g>
       </svg>
-      <div className="luna-name">Luna 🦉</div>
+      <div className="luna-name">Luna</div>
     </div>
   );
 };

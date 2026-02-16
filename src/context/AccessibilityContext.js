@@ -89,8 +89,13 @@ export const AccessibilityProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem('ttsEnabled', ttsEnabled);
-    if (!ttsEnabled && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
+    if (ttsEnabled) {
+      document.documentElement.removeAttribute('data-tts-off');
+    } else {
+      document.documentElement.setAttribute('data-tts-off', '');
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
     }
   }, [ttsEnabled]);
 

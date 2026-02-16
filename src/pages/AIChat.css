@@ -40,8 +40,8 @@
    ============================================ */
 .luna-character {
   text-align: center;
-  width: 180px;
-  height: 220px;
+  width: 200px;
+  height: 260px;
   position: relative;
   user-select: none;
   margin: 0 auto;
@@ -54,162 +54,217 @@
 }
 
 .luna-name {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
-  color: #7C5CBF;
-  margin-top: -4px;
-  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #7C3AED, #A78BFA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-top: -2px;
+  letter-spacing: 1px;
 }
 
-/* ---- Floating animation ---- */
+/* ---- Ambient glow ---- */
+.luna-glow {
+  animation: lunaGlow 4s ease-in-out infinite;
+}
+
+@keyframes lunaGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.5; }
+}
+
+/* ---- Floating + breathing ---- */
 .luna-float {
-  animation: lunaFloat 3.5s ease-in-out infinite;
+  animation: lunaFloat 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 
 @keyframes lunaFloat {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  50% { transform: translateY(-10px); }
+}
+
+.luna-body {
+  animation: lunaBreathe 4s ease-in-out infinite;
+}
+
+@keyframes lunaBreathe {
+  0%, 100% { transform: scaleX(1) scaleY(1); }
+  50% { transform: scaleX(1.015) scaleY(0.99); }
 }
 
 .luna-shadow {
-  transition: all 0.3s ease;
+  animation: lunaShadow 4s ease-in-out infinite;
+}
+
+@keyframes lunaShadow {
+  0%, 100% { rx: 36; opacity: 0.12; }
+  50% { rx: 30; opacity: 0.08; }
 }
 
 .luna-character:not(.thinking) .luna-float:hover {
-  animation: lunaFloat 2s ease-in-out infinite;
+  animation: lunaFloat 2.5s ease-in-out infinite;
 }
 
 /* ---- Blinking ---- */
 .luna-eyes {
-  animation: lunaBlink 5s ease-in-out infinite;
+  animation: lunaBlink 4.5s ease-in-out infinite;
 }
 
 @keyframes lunaBlink {
-  0%, 94%, 100% { opacity: 1; }
-  96% { opacity: 0; }
-  97% { opacity: 0; }
-  98% { opacity: 1; }
+  0%, 90%, 100% { transform: scaleY(1); }
+  93% { transform: scaleY(0.05); }
+  96% { transform: scaleY(1); }
 }
 
 /* ---- Wing animations ---- */
 .luna-wing-left,
 .luna-wing-right {
-  transition: transform 0.3s ease;
-  transform-origin: 50% 20%;
+  transition: transform 0.4s ease;
+  transform-origin: 50% 15%;
+}
+
+.luna-wing-left {
+  animation: lunaWingIdle 5s ease-in-out infinite;
+}
+.luna-wing-right {
+  animation: lunaWingIdle 5s ease-in-out 0.5s infinite;
+}
+
+@keyframes lunaWingIdle {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-3deg); }
 }
 
 .luna-wing-left.wave {
-  animation: lunaWingL 0.5s ease-in-out infinite alternate;
+  animation: lunaWingL 0.4s ease-in-out infinite alternate;
 }
 
 .luna-wing-right.wave {
-  animation: lunaWingR 0.5s ease-in-out infinite alternate;
-  animation-delay: 0.15s;
+  animation: lunaWingR 0.4s ease-in-out infinite alternate;
+  animation-delay: 0.12s;
 }
 
 @keyframes lunaWingL {
   0% { transform: rotate(0deg); }
-  100% { transform: rotate(-18deg) translateX(-4px); }
+  100% { transform: rotate(-22deg) translateX(-6px); }
 }
 
 @keyframes lunaWingR {
   0% { transform: rotate(0deg); }
-  100% { transform: rotate(18deg) translateX(4px); }
+  100% { transform: rotate(22deg) translateX(6px); }
+}
+
+/* ---- Ear tufts ---- */
+.luna-ears {
+  animation: lunaEars 5s ease-in-out infinite;
+}
+
+@keyframes lunaEars {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(0.5deg); }
+  75% { transform: rotate(-0.5deg); }
 }
 
 /* ---- Beak / Mouth ---- */
 .luna-beak {
   transition: transform 0.1s ease;
+  transform-origin: 100px 108px;
 }
 
 .luna-beak.talking {
-  animation: lunaTalk 0.25s ease infinite alternate;
+  animation: lunaTalk 0.2s ease infinite alternate;
 }
 
 .luna-mouth-open {
-  animation: lunaMouth 0.25s ease infinite alternate;
+  animation: lunaMouth 0.2s ease infinite alternate;
 }
 
 @keyframes lunaTalk {
   0% { transform: scaleY(1); }
-  100% { transform: scaleY(0.85) translateY(1px); }
+  100% { transform: scaleY(0.82) translateY(1.5px); }
 }
 
 @keyframes lunaMouth {
-  0% { transform: scaleY(0.6); opacity: 0.8; }
-  100% { transform: scaleY(1); opacity: 1; }
+  0% { transform: scaleY(0.5); opacity: 0.7; }
+  100% { transform: scaleY(1.1); opacity: 1; }
 }
 
-/* ---- Tassel swing ---- */
-.luna-tassel {
-  animation: lunaTassel 2.5s ease-in-out infinite;
-  transform-origin: 119px 43px;
+/* ---- Scarf ---- */
+.luna-scarf {
+  animation: lunaScarf 6s ease-in-out infinite;
 }
 
-@keyframes lunaTassel {
-  0%, 100% { transform: rotate(0deg); }
-  30% { transform: rotate(8deg); }
-  70% { transform: rotate(-8deg); }
+@keyframes lunaScarf {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(0.5deg) translateX(0.5px); }
 }
 
 /* ---- Mood: Thinking ---- */
 .luna-character.thinking .luna-float {
-  animation: lunaThink 1.5s ease-in-out infinite;
+  animation: lunaThink 2s ease-in-out infinite;
 }
 
 @keyframes lunaThink {
   0%, 100% { transform: translateY(0) rotate(0); }
-  50% { transform: translateY(-5px) rotate(2deg); }
+  30% { transform: translateY(-6px) rotate(1.5deg); }
+  60% { transform: translateY(-3px) rotate(-1deg); }
 }
 
 .luna-think-bubbles .think-dot-1 {
-  animation: thinkPop 1.5s ease infinite;
+  animation: thinkPop 1.8s ease infinite;
 }
 .luna-think-bubbles .think-dot-2 {
-  animation: thinkPop 1.5s ease 0.3s infinite;
+  animation: thinkPop 1.8s ease 0.3s infinite;
 }
 .luna-think-bubbles .think-dot-3 {
-  animation: thinkPop 1.5s ease 0.6s infinite;
+  animation: thinkPop 1.8s ease 0.6s infinite;
 }
 
 @keyframes thinkPop {
-  0%, 100% { transform: scale(0.8); opacity: 0.3; }
-  50% { transform: scale(1.2); opacity: 0.8; }
+  0%, 100% { transform: scale(0.6); opacity: 0.2; }
+  50% { transform: scale(1.3); opacity: 0.9; }
 }
 
 /* ---- Mood: Happy ---- */
-.luna-character.happy .luna-blush {
-  opacity: 0.7;
+.luna-character.happy .luna-float {
+  animation: lunaHappy 3.5s ease-in-out infinite;
 }
 
-.luna-character.happy .luna-float {
-  animation: lunaFloat 3s ease-in-out infinite;
+@keyframes lunaHappy {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  25% { transform: translateY(-8px) rotate(-1deg); }
+  75% { transform: translateY(-4px) rotate(1deg); }
 }
 
 /* ---- Mood: Excited ---- */
 .luna-character.excited .luna-float {
-  animation: lunaExcited 0.5s ease infinite;
+  animation: lunaExcited 0.6s ease infinite;
 }
 
 @keyframes lunaExcited {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-14px) scale(1.02); }
 }
 
 /* Sparkles */
 .luna-sparkles .sparkle-1 { animation: sparkleFloat 1.5s ease infinite; }
 .luna-sparkles .sparkle-2 { animation: sparkleFloat 1.8s ease 0.2s infinite; }
-.luna-sparkles .sparkle-3 { animation: sparkleFloat 1.3s ease 0.5s infinite; }
+.luna-sparkles .sparkle-3 { animation: sparkleFloat 1.4s ease 0.5s infinite; }
 .luna-sparkles .sparkle-4 { animation: sparkleFloat 1.6s ease 0.3s infinite; }
 
 @keyframes sparkleFloat {
-  0%, 100% { opacity: 0.3; transform: translateY(0) scale(0.8); }
-  50% { opacity: 1; transform: translateY(-6px) scale(1.2); }
+  0%, 100% { opacity: 0.2; transform: translateY(0) scale(0.6); }
+  50% { opacity: 1; transform: translateY(-8px) scale(1.4); }
 }
 
 /* ---- Speaking ---- */
 .luna-character.speaking .luna-beak {
-  animation: lunaTalk 0.25s ease infinite alternate;
+  animation: lunaTalk 0.2s ease infinite alternate;
+}
+
+.luna-character.speaking .luna-glow {
+  animation: lunaGlow 1.5s ease-in-out infinite;
 }
 
 /* Status */

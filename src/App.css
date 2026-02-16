@@ -326,6 +326,17 @@
 /* ============================================
    TTS (Text-to-Speech) Buttons — Global
    ============================================ */
+
+/* Hide ALL TTS buttons when ozuchivanie is disabled */
+[data-tts-off] .tts-btn,
+[data-tts-off] .tts-btn-sm,
+[data-tts-off] .tts-btn-inline,
+[data-tts-off] .tts-action-btn,
+[data-tts-off] .msg-speak-btn,
+[data-tts-off] .card-tts-actions,
+[data-tts-off] .hero-tts {
+  display: none !important;
+}
 .tts-btn {
   width: 44px;
   height: 44px;
