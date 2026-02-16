@@ -768,3 +768,42 @@
     flex-direction: column;
   }
 }
+
+/* Auth Required */
+.chat-auth-required {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 400px;
+  text-align: center;
+  padding: 40px 20px;
+  gap: 16px;
+}
+
+.auth-required-icon {
+  font-size: 64px;
+  margin-bottom: 8px;
+}
+
+.chat-auth-required h2 {
+  font-size: var(--fs-xl, 1.5rem);
+  color: var(--primary, #6D28D9);
+  margin: 0;
+}
+
+.chat-auth-required p {
+  color: var(--text-secondary, #64748B);
+  font-size: var(--fs-md, 1rem);
+  max-width: 360px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.chat-auth-required .btn-primary {
+  margin-top: 8px;
+  font-size: var(--fs-md, 1rem);
+  padding: 12px 32px;
+  border-radius: 12px;
+}

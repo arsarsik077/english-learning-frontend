@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { usePoints } from '../context/PointsContext';
 import { useAccessibility } from '../context/AccessibilityContext';
+import { useAuth } from '../context/AuthContext';
 import API_URL from '../config';
 import './AIChat.css';
 
@@ -255,6 +257,8 @@ const LunaCharacter = ({ mood = 'idle', speaking = false }) => {
 const AIChat = () => {
   const { recordAIMessage, addXP } = usePoints();
   const { speak } = useAccessibility();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([
     {
       type: 'ai',
@@ -305,10 +309,18 @@ const AIChat = () => {
         setOwlMood('idle');
       }
     } catch (err) {
-      setMessages(prev => [...prev, {
-        type: 'ai',
-        text: "Извини, произошла ошибка соединения. Проверь интернет и попробуй ещё раз! 🦉",
-      }]);
+      const status = err.response?.status;
+      if (status === 401 || status === 403) {
+        setMessages(prev => [...prev, {
+          type: 'ai',
+          text: "Для общения со мной нужно войти в аккаунт. Перейди на страницу входа и авторизуйся! 🔒",
+        }]);
+      } else {
+        setMessages(prev => [...prev, {
+          type: 'ai',
+          text: "Извини, произошла ошибка соединения. Проверь интернет и попробуй ещё раз! 🦉",
+        }]);
+      }
       setOwlMood('idle');
     } finally {
       setIsTyping(false);
@@ -332,6 +344,34 @@ const AIChat = () => {
     setInput(prompt);
     setTimeout(() => sendMessage(prompt), 50);
   };
+
+  if (!user) {
+    return (
+      <main className="ai-chat-page" role="main">
+        <div className="container">
+          <div className="chat-layout">
+            <aside className="chat-sidebar" aria-label="AI Персонаж Luna">
+              <LunaCharacter mood="idle" speaking={false} />
+              <div className="char-info">
+                <h3>🦉 Luna</h3>
+                <p>AI-сова учитель</p>
+              </div>
+            </aside>
+            <div className="chat-main">
+              <div className="chat-auth-required">
+                <div className="auth-required-icon">🔒</div>
+                <h2>Авторизация необходима</h2>
+                <p>Чтобы общаться с Luna, нужно войти в свой аккаунт или зарегистрироваться.</p>
+                <button className="btn btn-primary" onClick={() => navigate('/login')}>
+                  Войти в аккаунт
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="ai-chat-page" role="main">
