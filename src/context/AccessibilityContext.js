@@ -13,9 +13,6 @@ export const useAccessibility = () => {
 export const AccessibilityProvider = ({ children }) => {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'default');
   const [fontSize, setFontSize] = useState(localStorage.getItem('fontSize') || 'normal');
-  const [screenReaderMode, setScreenReaderMode] = useState(
-    localStorage.getItem('screenReaderMode') === 'true'
-  );
   const [reducedMotion, setReducedMotion] = useState(
     localStorage.getItem('reducedMotion') === 'true'
   );
@@ -50,14 +47,6 @@ export const AccessibilityProvider = ({ children }) => {
     }
     localStorage.setItem('fontSize', fontSize);
   }, [fontSize]);
-
-  useEffect(() => {
-    localStorage.setItem('screenReaderMode', screenReaderMode);
-    if (screenReaderMode) {
-      document.documentElement.setAttribute('role', 'application');
-      document.documentElement.setAttribute('aria-label', 'English Learning Platform - Платформа для изучения английского');
-    }
-  }, [screenReaderMode]);
 
   useEffect(() => {
     localStorage.setItem('reducedMotion', reducedMotion);
@@ -132,8 +121,6 @@ export const AccessibilityProvider = ({ children }) => {
     setTheme,
     fontSize,
     setFontSize,
-    screenReaderMode,
-    setScreenReaderMode,
     reducedMotion,
     setReducedMotion,
     dyslexiaFont,

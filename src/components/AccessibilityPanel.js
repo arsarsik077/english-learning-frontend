@@ -7,7 +7,6 @@ const AccessibilityPanel = () => {
     theme, setTheme,
     fontSize, setFontSize,
     ttsEnabled, setTtsEnabled,
-    screenReaderMode, setScreenReaderMode,
     reducedMotion, setReducedMotion,
     dyslexiaFont, setDyslexiaFont,
     showPanel, setShowPanel,
@@ -107,21 +106,6 @@ const AccessibilityPanel = () => {
             </span>
           </label>
           
-          <label className="a11y-toggle">
-            <input 
-              type="checkbox" 
-              checked={screenReaderMode} 
-              onChange={(e) => setScreenReaderMode(e.target.checked)}
-              aria-label="Режим для экранного чтеца"
-            />
-            <span className="a11y-toggle-slider"></span>
-            <span className="a11y-toggle-label">
-              <span className="a11y-icon">♿</span>
-              Режим экранного чтеца
-              <small>Дополнительные aria-метки для незрячих</small>
-            </span>
-          </label>
-
           <label className="a11y-toggle">
             <input 
               type="checkbox" 
