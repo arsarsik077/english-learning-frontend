@@ -79,10 +79,22 @@ const AdminPanel = () => {
     setFormData(updated);
   };
 
+  const buildPayload = (data) => {
+    const payload = {};
+    for (const [key, value] of Object.entries(data)) {
+      if (key === 'lesson.id') {
+        if (value) payload.lesson = { id: Number(value) };
+      } else {
+        payload[key] = value;
+      }
+    }
+    return payload;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_URL}/api/${activeTab}`, formData);
+      await axios.post(`${API_URL}/api/${activeTab}`, buildPayload(formData));
       alert('Успешно создано!');
       setFormData({});
       e.target.reset();
