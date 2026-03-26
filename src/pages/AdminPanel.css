@@ -8,9 +8,17 @@
   animation: fadeIn 0.4s ease;
 }
 
+.admin-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .admin-panel h1 {
   color: var(--text-primary);
-  margin-bottom: 24px;
   font-size: var(--fs-2xl);
   font-weight: 800;
 }

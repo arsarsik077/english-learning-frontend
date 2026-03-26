@@ -19,6 +19,7 @@ import Cards from './pages/Cards';
 import Games from './pages/Games';
 import AIChat from './pages/AIChat';
 import AdminPanel from './pages/AdminPanel';
+import AdminSubmissions from './pages/AdminSubmissions';
 import './App.css';
 
 const basename = process.env.PUBLIC_URL || '';
@@ -64,6 +65,14 @@ function App() {
                     element={
                       <PrivateRoute adminOnly>
                         <AdminPanel />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/submissions"
+                    element={
+                      <PrivateRoute adminOnly>
+                        <AdminSubmissions />
                       </PrivateRoute>
                     }
                   />

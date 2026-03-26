@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import API_URL from '../config';
 import './AdminPanel.css';
@@ -186,7 +187,12 @@ const AdminPanel = () => {
   return (
     <div className="container">
       <div className="admin-panel">
-        <h1>Админ-панель</h1>
+        <div className="admin-top-row">
+          <h1>Админ-панель</h1>
+          <Link to="/admin/submissions" className="btn btn-primary">
+            📝 Ответы студентов
+          </Link>
+        </div>
 
         <div className="admin-tabs">
           {TABS.map((tab) => (

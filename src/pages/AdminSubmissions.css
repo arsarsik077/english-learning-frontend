@@ -1,0 +1,193 @@
+.submissions-page {
+  padding-bottom: 60px;
+}
+
+.submissions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 30px;
+  margin-bottom: 24px;
+}
+
+.submissions-header h1 {
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 8px 0 4px;
+}
+
+.submissions-header p {
+  color: var(--text-muted);
+  font-size: var(--fs-base);
+}
+
+/* ── Filter ── */
+.submissions-filter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.submissions-filter label {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+
+.submissions-filter select {
+  flex: 1;
+  max-width: 400px;
+  padding: 10px 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.submissions-filter select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* ── Submissions List ── */
+.submissions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.submission-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px 24px;
+  transition: all var(--transition);
+  animation: fadeIn 0.3s ease;
+}
+
+.submission-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-light, var(--primary));
+}
+
+.submission-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.submission-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.submission-user {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: var(--fs-base);
+}
+
+.submission-date {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.submission-assignment {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: var(--primary);
+  color: white;
+  white-space: nowrap;
+}
+
+/* ── Answer ── */
+.submission-answer {
+  margin-bottom: 12px;
+}
+
+.submission-answer strong {
+  display: block;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.submission-answer p {
+  color: var(--text-primary);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  background: var(--bg-secondary);
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--primary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ── Score & Feedback ── */
+.submission-score {
+  margin-top: 12px;
+  font-size: var(--fs-sm);
+  color: var(--text-primary);
+  padding: 8px 14px;
+  background: rgba(56, 161, 105, 0.1);
+  border-radius: var(--radius-sm);
+  display: inline-block;
+}
+
+.submission-score strong {
+  color: #38A169;
+}
+
+.submission-feedback {
+  margin-top: 8px;
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .submissions-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .submissions-filter {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .submissions-filter select {
+    width: 100%;
+    max-width: none;
+  }
+
+  .submission-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .submission-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
