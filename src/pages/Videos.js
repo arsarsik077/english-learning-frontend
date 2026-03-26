@@ -5,12 +5,22 @@ import { usePoints } from '../context/PointsContext';
 import API_URL from '../config';
 import './Videos.css';
 
-const getYouTubeThumbnail = (url) => {
+const extractYouTubeId = (url) => {
   if (!url) return null;
   const match = url.match(
     /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|.*&v=))([^?&/]+)/
   );
-  return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null;
+  return match ? match[1] : null;
+};
+
+const getYouTubeThumbnail = (url) => {
+  const id = extractYouTubeId(url);
+  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+};
+
+const getYouTubeEmbedUrl = (url) => {
+  const id = extractYouTubeId(url);
+  return id ? `https://www.youtube.com/embed/${id}` : url;
 };
 
 const Videos = () => {
@@ -91,8 +101,9 @@ const Videos = () => {
                   {playingId === video.id ? (
                     <div className="video-iframe-container">
                       <iframe
-                        src={video.videoUrl}
+                        src={getYouTubeEmbedUrl(video.videoUrl)}
                         title={video.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                         className="video-iframe"
                       />
