@@ -5,6 +5,14 @@ import { usePoints } from '../context/PointsContext';
 import API_URL from '../config';
 import './Videos.css';
 
+const getYouTubeThumbnail = (url) => {
+  if (!url) return null;
+  const match = url.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|.*&v=))([^?&/]+)/
+  );
+  return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null;
+};
+
 const Videos = () => {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -98,8 +106,8 @@ const Videos = () => {
                       aria-label={`Воспроизвести: ${video.title}`}
                       onKeyDown={(e) => e.key === 'Enter' && handlePlayVideo(video.id)}
                     >
-                      {video.thumbnailUrl ? (
-                        <img src={video.thumbnailUrl} alt={video.title} className="video-thumb-img" />
+                      {(video.thumbnailUrl || getYouTubeThumbnail(video.videoUrl)) ? (
+                        <img src={video.thumbnailUrl || getYouTubeThumbnail(video.videoUrl)} alt={video.title} className="video-thumb-img" />
                       ) : (
                         <div className="video-thumb-placeholder">
                           <span>▶️</span>

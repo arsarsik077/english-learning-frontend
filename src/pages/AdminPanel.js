@@ -44,8 +44,25 @@ const AdminPanel = () => {
     setDeleteConfirm(null);
   }, [fetchItems]);
 
+  const extractYouTubeId = (url) => {
+    const match = url.match(
+      /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|.*&v=))([^?&/]+)/
+    );
+    return match ? match[1] : null;
+  };
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    const updated = { ...formData, [name]: value };
+
+    if (name === 'videoUrl' && value) {
+      const videoId = extractYouTubeId(value);
+      if (videoId) {
+        updated.thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+      }
+    }
+
+    setFormData(updated);
   };
 
   const handleSubmit = async (e) => {
@@ -181,13 +198,17 @@ const AdminPanel = () => {
                     <textarea name="description" onChange={handleChange} rows={3} />
                   </div>
                   <div className="input-group">
-                    <label>URL видео</label>
+                    <label>URL видео (YouTube)</label>
                     <input type="url" name="videoUrl" onChange={handleChange} required />
                   </div>
-                  <div className="input-group">
-                    <label>URL миниатюры</label>
-                    <input type="url" name="thumbnailUrl" onChange={handleChange} />
-                  </div>
+                  {formData.thumbnailUrl && (
+                    <div className="input-group">
+                      <label>Миниатюра (автоматически)</label>
+                      <div className="thumbnail-preview">
+                        <img src={formData.thumbnailUrl} alt="Превью" />
+                      </div>
+                    </div>
+                  )}
                   <div className="input-group">
                     <label>Длительность (секунды)</label>
                     <input type="number" name="duration" onChange={handleChange} />

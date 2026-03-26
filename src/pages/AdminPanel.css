@@ -111,6 +111,18 @@
   border-color: var(--primary);
 }
 
+.thumbnail-preview {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 2px solid var(--border);
+  max-width: 320px;
+}
+
+.thumbnail-preview img {
+  width: 100%;
+  display: block;
+}
+
 /* ── Records List ── */
 .records-list {
   display: flex;
