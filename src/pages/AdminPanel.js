@@ -112,6 +112,12 @@ const AdminPanel = () => {
     }
   };
 
+  const lessonTag = (item) => {
+    const name = item.lesson?.title;
+    if (!name) return null;
+    return <span className="item-badge lesson-tag">📖 {name}</span>;
+  };
+
   const renderItemInfo = (item) => {
     switch (activeTab) {
       case 'lessons':
@@ -126,9 +132,10 @@ const AdminPanel = () => {
         return (
           <>
             <span className="item-title">{item.title}</span>
+            {lessonTag(item)}
             {item.duration && (
               <span className="item-badge">
-                {Math.floor(item.duration / 60)}:{(item.duration % 60).toString().padStart(2, '0')}
+                ⏱ {Math.floor(item.duration / 60)}:{(item.duration % 60).toString().padStart(2, '0')}
               </span>
             )}
             {item.description && <span className="item-desc">{item.description}</span>}
@@ -138,6 +145,7 @@ const AdminPanel = () => {
         return (
           <>
             <span className="item-title">{item.title}</span>
+            {lessonTag(item)}
             {item.description && <span className="item-desc">{item.description}</span>}
           </>
         );
@@ -146,6 +154,7 @@ const AdminPanel = () => {
           <>
             <span className="item-title">{item.englishWord}</span>
             <span className="item-badge">{item.translation}</span>
+            {lessonTag(item)}
             {item.example && <span className="item-desc">{item.example}</span>}
           </>
         );

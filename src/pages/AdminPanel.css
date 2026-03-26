@@ -191,6 +191,10 @@
   max-width: 300px;
 }
 
+.lesson-tag {
+  background: #38A169 !important;
+}
+
 /* ── Delete ── */
 .record-actions {
   flex-shrink: 0;

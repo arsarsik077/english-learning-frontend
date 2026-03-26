@@ -5,6 +5,14 @@ import { useAccessibility } from '../context/AccessibilityContext';
 import API_URL from '../config';
 import './LessonDetail.css';
 
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return url;
+  const match = url.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|.*&v=))([^?&/]+)/
+  );
+  return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+};
+
 const LessonDetail = () => {
   const { id } = useParams();
   const [lesson, setLesson] = useState(null);
@@ -115,8 +123,9 @@ const LessonDetail = () => {
                   </div>
                   <div className="detail-video-player">
                     <iframe
-                      src={video.videoUrl}
+                      src={getYouTubeEmbedUrl(video.videoUrl)}
                       title={video.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                     />
                   </div>
