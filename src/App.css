@@ -268,9 +268,7 @@
   text-align: center;
   border: 1px solid var(--secondary-light);
   font-weight: 500;
-}
-
-/* Points Display */
+}/* Points Display */
 .points-badge {
   display: inline-flex;
   align-items: center;

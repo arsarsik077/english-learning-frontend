@@ -647,9 +647,7 @@
 
   .quiz-options {
     grid-template-columns: 1fr;
-  }
-
-  .key-btn {
+  }  .key-btn {
     width: 34px;
     height: 34px;
     font-size: var(--fs-sm);

@@ -928,9 +928,7 @@ const SpeedTranslateGame = () => {
           <h3>Время вышло! Вы перевели {score} слов!</h3>
           <button onClick={startGame} className="btn btn-primary">Играть снова</button>
         </div>
-      )}
-
-      {gameStarted && !gameOver && words.length > 0 && (
+      )}      {gameStarted && !gameOver && words.length > 0 && (
         <div className="speed-game">
           <div className="speed-timer" style={{ color: timeLeft <= 10 ? 'var(--error-dark)' : 'var(--text-primary)' }}>
             ⏱️ {timeLeft}s

@@ -93,9 +93,7 @@
 .profile-stat-icon {
   font-size: 32px;
   margin-bottom: 8px;
-}
-
-.profile-stat h4 {
+}.profile-stat h4 {
   font-size: var(--fs-xl);
   font-weight: 800;
   color: var(--text-primary);

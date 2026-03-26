@@ -182,9 +182,7 @@
 
   .card-navigation {
     gap: 10px;
-  }
-
-  .card-tts-actions {
+  }  .card-tts-actions {
     gap: 8px;
   }  .tts-action-btn {
     font-size: var(--fs-xs) !important;

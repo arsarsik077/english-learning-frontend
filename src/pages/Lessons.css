@@ -269,9 +269,7 @@
 
   .page-hero h1 {
     font-size: var(--fs-xl);
-  }
-
-  .lessons-grid {
+  }  .lessons-grid {
     grid-template-columns: 1fr;
   }  .filter-bar {
     justify-content: center;

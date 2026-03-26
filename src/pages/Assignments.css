@@ -188,9 +188,7 @@
 @media (max-width: 768px) {
   .assign-card {
     padding: 20px;
-  }
-
-  .assign-card-header {
+  }  .assign-card-header {
     flex-direction: column;
     gap: 10px;
   }  .assign-actions-top {

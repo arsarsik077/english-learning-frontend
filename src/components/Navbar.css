@@ -301,9 +301,7 @@
 
   .nav-item-label {
     display: inline;
-  }
-
-  .nav-auth {
+  }  .nav-auth {
     display: none;
   }  .nav-inner {
     height: 56px;
