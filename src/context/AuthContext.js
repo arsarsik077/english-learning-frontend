@@ -20,10 +20,15 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      fetchUser();
+      if (!user) {
+        fetchUser();
+      } else {
+        setLoading(false);
+      }
     } else {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const fetchUser = async () => {
@@ -32,7 +37,10 @@ export const AuthProvider = ({ children }) => {
       setUser(response.data);
     } catch (error) {
       console.error('Error fetching user:', error);
-      logout();
+      const status = error.response?.status;
+      if (status === 401) {
+        logout();
+      }
     } finally {
       setLoading(false);
     }
