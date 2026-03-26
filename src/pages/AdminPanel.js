@@ -15,10 +15,24 @@ const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('lessons');
   const [formData, setFormData] = useState({});
   const [items, setItems] = useState([]);
+  const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/api/lessons`);
+        const data = res.data;
+        setLessons(Array.isArray(data) ? data : data.content || []);
+      } catch (err) {
+        console.error('Error fetching lessons for select:', err);
+      }
+    };
+    fetchLessons();
+  }, []);
 
   const fetchItems = useCallback(async () => {
     setLoading(true);
@@ -73,6 +87,11 @@ const AdminPanel = () => {
       setFormData({});
       e.target.reset();
       fetchItems();
+      if (activeTab === 'lessons') {
+        const res = await axios.get(`${API_URL}/api/lessons`);
+        const data = res.data;
+        setLessons(Array.isArray(data) ? data : data.content || []);
+      }
     } catch (error) {
       console.error('Error creating:', error);
       alert('Ошибка при создании');
@@ -214,8 +233,13 @@ const AdminPanel = () => {
                     <input type="number" name="duration" onChange={handleChange} />
                   </div>
                   <div className="input-group">
-                    <label>ID урока</label>
-                    <input type="number" name="lesson.id" onChange={handleChange} />
+                    <label>Урок</label>
+                    <select name="lesson.id" onChange={handleChange}>
+                      <option value="">Без урока</option>
+                      {lessons.map((l) => (
+                        <option key={l.id} value={l.id}>{l.title} ({l.level})</option>
+                      ))}
+                    </select>
                   </div>
                 </>
               )}
@@ -235,8 +259,13 @@ const AdminPanel = () => {
                     <textarea name="instructions" onChange={handleChange} rows={3} />
                   </div>
                   <div className="input-group">
-                    <label>ID урока</label>
-                    <input type="number" name="lesson.id" onChange={handleChange} />
+                    <label>Урок</label>
+                    <select name="lesson.id" onChange={handleChange}>
+                      <option value="">Без урока</option>
+                      {lessons.map((l) => (
+                        <option key={l.id} value={l.id}>{l.title} ({l.level})</option>
+                      ))}
+                    </select>
                   </div>
                 </>
               )}
@@ -260,8 +289,13 @@ const AdminPanel = () => {
                     <input type="url" name="imageUrl" onChange={handleChange} />
                   </div>
                   <div className="input-group">
-                    <label>ID урока</label>
-                    <input type="number" name="lesson.id" onChange={handleChange} />
+                    <label>Урок</label>
+                    <select name="lesson.id" onChange={handleChange}>
+                      <option value="">Без урока</option>
+                      {lessons.map((l) => (
+                        <option key={l.id} value={l.id}>{l.title} ({l.level})</option>
+                      ))}
+                    </select>
                   </div>
                 </>
               )}
