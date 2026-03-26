@@ -16,16 +16,23 @@ const AdminPanel = () => {
   const [formData, setFormData] = useState({});
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
   const fetchItems = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
       const response = await axios.get(`${API_URL}/api/${activeTab}`);
-      setItems(response.data);
-    } catch (error) {
-      console.error(`Error fetching ${activeTab}:`, error);
+      const data = response.data;
+      setItems(Array.isArray(data) ? data : data.content || []);
+    } catch (err) {
+      console.error(`Error fetching ${activeTab}:`, err);
+      setError(err.response?.status === 403
+        ? 'Нет доступа. Войдите как администратор.'
+        : `Ошибка загрузки: ${err.message}`
+      );
       setItems([]);
     } finally {
       setLoading(false);
@@ -288,6 +295,13 @@ const AdminPanel = () => {
               <div className="admin-loading">
                 <div className="loading-spinner"></div>
                 <p>Загрузка...</p>
+              </div>
+            ) : error ? (
+              <div className="admin-error">
+                <p>❌ {error}</p>
+                <button className="btn btn-primary btn-sm" onClick={fetchItems}>
+                  Попробовать снова
+                </button>
               </div>
             ) : items.length === 0 ? (
               <div className="admin-empty">

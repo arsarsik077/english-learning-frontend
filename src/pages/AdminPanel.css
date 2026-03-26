@@ -256,6 +256,20 @@
   font-size: var(--fs-base);
 }
 
+.admin-error {
+  text-align: center;
+  padding: 32px;
+  color: var(--error-dark, #c62828);
+  font-size: var(--fs-base);
+  background: rgba(198, 40, 40, 0.06);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(198, 40, 40, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .admin-panel {
